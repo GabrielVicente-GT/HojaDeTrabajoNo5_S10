@@ -12,6 +12,7 @@ velocidad_procesador = 3.0
 Intervalation = 10
 Corsair = 100
 
+#definicion de la vida de un proceso en el sistema operativo
 def Procc(env, RAM, velocidad_procesador, tiempo_inicio, proceso_num):    
     global Totalidad
     global Tiempo_procesando
@@ -43,7 +44,10 @@ def Procc(env, RAM, velocidad_procesador, tiempo_inicio, proceso_num):
     yield RAM.put(cantidad)
     Tiempo_procesando.append(env.now - Ingresando_SO)
     Totalidad += (env.now - Ingresando_SO)
-    
+
+def average_simulation(cantidad, individuos,Cantidad_de_procesos,Tiempo_procesando):
+    averages = (cantidad/individuos)
+    print("Tiempo Promedio %s" % averages)
 def realizando(env, RAM, Cantidad_de_procesos,Intervalation):
     for i in range(Cantidad_de_procesos):
         tiempo_inicio = random.expovariate(1.0 / Intervalation)
@@ -56,8 +60,7 @@ CPU = simpy.Resource (env, capacity=1)
 RAM = simpy.Container(env, init = Corsair, capacity = Corsair)
 Tiempo_procesando=[]
 Totalidad = 0.0         
-
 realizando(env, RAM, Cantidad_de_procesos,Intervalation)
 env.run()
-
+average_simulation(Totalidad,Cantidad_de_procesos,Cantidad_de_procesos,Tiempo_procesando)
 
