@@ -1,6 +1,5 @@
 #Gabriel Vicente & Pedro Arriola
 #Algoritmos y estructuras de datos 10
-
 #Imports necesarios para que funcione el programa
 
 import random
@@ -42,9 +41,17 @@ def Procc(env, RAM, velocidad_procesador, tiempo_inicio, proceso_num):
     yield RAM.put(cantidad)
     Tiempo_procesando.append(env.now - Ingresando_SO)
     Totalidad += (env.now - Ingresando_SO)
+    
+
+#funciones estadisticas y recreaciones de la simulacion
 
 def average_simulation(cantidad, individuos,Cantidad_de_procesos,Tiempo_procesando):
     averages = (cantidad/individuos)
+    print("")
+    print("------------------------------------------------")
+    print("---------------Datos de la simulación-----------")
+    print("------------------------------------------------")
+    print("")
     print("Tiempo Promedio %s" % averages)
     desviation(averages,Cantidad_de_procesos,Tiempo_procesando)
     
@@ -56,11 +63,14 @@ def realizando(env, RAM, Cantidad_de_procesos,Intervalation):
 def desviation(promedio,num,tiempito):
     dev = 0
     for i in tiempito:
-        dev += (i - promedio)*2
-    desviation = (dev/(num-1))*0.5
+        dev += (i - promedio)**2
+    desviation = (dev/(num-1))**0.5
     # Imprime el resultado
     print("Desviacion %s"% desviation)
     
+#variables de la simulacion que se pueden modificar para ver cual nos brinda un mayor rendimiento
+#Necesarias para el funcionoameito de la simulacion en las que se especifica la funcionalidad de
+
 env = simpy.Environment()
 random.seed(4573)
 esperando = simpy.Resource (env, capacity=2) 
@@ -69,7 +79,7 @@ RAM = simpy.Container(env, init = Corsair, capacity = Corsair)
 Tiempo_procesando=[]
 Totalidad = 0.0         
 
+#Se llama a la simluacion al igual que sus datos finales
 realizando(env, RAM, Cantidad_de_procesos,Intervalation)
 env.run()
 average_simulation(Totalidad,Cantidad_de_procesos,Cantidad_de_procesos,Tiempo_procesando)
-
