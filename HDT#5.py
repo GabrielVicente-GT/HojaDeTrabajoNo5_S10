@@ -1,6 +1,9 @@
 #Gabriel Vicente & Pedro Arriola
 #Algoritmos y estructuras de datos 10
 
+
+#Imports necesarios para que funcione el programa
+
 import random
 import statistics
 import simpy
@@ -40,6 +43,11 @@ def Procc(env, RAM, velocidad_procesador, tiempo_inicio, proceso_num):
     yield RAM.put(cantidad)
     Tiempo_procesando.append(env.now - Ingresando_SO)
     Totalidad += (env.now - Ingresando_SO)
+    
+def realizando(env, RAM, Cantidad_de_procesos,Intervalation):
+    for i in range(Cantidad_de_procesos):
+        tiempo_inicio = random.expovariate(1.0 / Intervalation)
+        env.process(Procc(env, RAM, velocidad_procesador,tiempo_inicio, i))
 
 env = simpy.Environment()
 random.seed(4573)
@@ -49,7 +57,7 @@ RAM = simpy.Container(env, init = Corsair, capacity = Corsair)
 Tiempo_procesando=[]
 Totalidad = 0.0         
 
-env.process(Procc(env, RAM, velocidad_procesador,0.3, 2))
+realizando(env, RAM, Cantidad_de_procesos,Intervalation)
 env.run()
 
 
